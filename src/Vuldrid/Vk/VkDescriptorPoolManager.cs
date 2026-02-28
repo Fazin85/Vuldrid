@@ -179,7 +179,7 @@ namespace Vuldrid.Vk
         }
     }
 
-    internal struct DescriptorAllocationToken
+    internal readonly struct DescriptorAllocationToken
     {
         public readonly VkDescriptorSet Set;
         public readonly VkDescriptorPool Pool;

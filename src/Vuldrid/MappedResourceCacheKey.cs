@@ -2,7 +2,7 @@
 
 namespace Vuldrid
 {
-    internal struct MappedResourceCacheKey : IEquatable<MappedResourceCacheKey>
+    internal readonly struct MappedResourceCacheKey : IEquatable<MappedResourceCacheKey>
     {
         public readonly MappableResource Resource;
         public readonly uint Subresource;

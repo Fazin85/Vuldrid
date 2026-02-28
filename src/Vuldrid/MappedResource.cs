@@ -6,7 +6,7 @@ namespace Vuldrid
     /// <summary>
     /// A structure describing the layout of a mapped <see cref="MappableResource"/> object.
     /// </summary>
-    public struct MappedResource
+    public readonly struct MappedResource
     {
         /// <summary>
         /// The resource which has been mapped.
@@ -76,7 +76,7 @@ namespace Vuldrid
     /// mapped resource.
     /// </summary>
     /// <typeparam name="T">The blittable value type which mapped data is viewed as.</typeparam>
-    public unsafe struct MappedResourceView<T> where T : struct
+    public readonly unsafe struct MappedResourceView<T> where T : struct
     {
         private static readonly int s_sizeofT = Unsafe.SizeOf<T>();
 
