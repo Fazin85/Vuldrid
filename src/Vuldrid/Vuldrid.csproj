@@ -6,7 +6,6 @@
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn Condition="'$(Configuration)' == 'Debug'">1591</NoWarn>
     <DefineConstants>$(DefineConstants);VALIDATE_USAGE</DefineConstants>
-    <DefineConstants Condition="'$(ExcludeVulkan)' == 'true'">$(DefineConstants);EXCLUDE_VULKAN_BACKEND</DefineConstants>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
@@ -17,12 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-
-    <PackageReference Include="Vk" Version="1.0.25" Condition="'$(ExcludeVulkan)' != 'true'" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Vk/**/*" Condition="'$(ExcludeVulkan)' == 'true'" />
+    <PackageReference Include="Vk" Version="1.0.25" />
   </ItemGroup>
 
 </Project>
