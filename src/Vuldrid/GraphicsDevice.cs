@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Vuldrid.Vk;
 
 namespace Vuldrid
@@ -12,8 +13,8 @@ namespace Vuldrid
     /// </summary>
     public abstract class GraphicsDevice : IDisposable
     {
-        private readonly object _deferredDisposalLock = new object();
-        private readonly List<IDisposable> _disposables = new List<IDisposable>();
+        private readonly Lock _deferredDisposalLock = new();
+        private readonly List<IDisposable> _disposables = [];
         private Sampler _aniso4xSampler;
 
         internal GraphicsDevice() { }

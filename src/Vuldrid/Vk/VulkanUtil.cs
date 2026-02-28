@@ -9,8 +9,8 @@ namespace Vuldrid.Vk
 {
     internal unsafe static class VulkanUtil
     {
-        private static readonly Lazy<bool> s_isVulkanLoaded = new Lazy<bool>(TryLoadVulkan);
-        private static readonly Lazy<string[]> s_instanceExtensions = new Lazy<string[]>(EnumerateInstanceExtensions);
+        private static readonly Lazy<bool> s_isVulkanLoaded = new(TryLoadVulkan);
+        private static readonly Lazy<string[]> s_instanceExtensions = new(EnumerateInstanceExtensions);
 
         [Conditional("DEBUG")]
         public static void CheckResult(VkResult result)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Vulkan;
 using static Vulkan.VulkanNative;
 
@@ -9,8 +10,8 @@ namespace Vuldrid.Vk
     internal class VkDescriptorPoolManager
     {
         private readonly VkGraphicsDevice _gd;
-        private readonly List<PoolInfo> _pools = new List<PoolInfo>();
-        private readonly object _lock = new object();
+        private readonly List<PoolInfo> _pools = [];
+        private readonly Lock _lock = new();
 
         public VkDescriptorPoolManager(VkGraphicsDevice gd)
         {

@@ -8,10 +8,9 @@ namespace Vuldrid
     public struct SwapchainDescription : IEquatable<SwapchainDescription>
     {
         /// <summary>
-        /// The <see cref="SwapchainSource"/> which will be used as the target of rendering operations.
-        /// This is a window-system-specific object which differs by platform.
+        /// The native window handle which will be used as the target of rendering operations.
         /// </summary>
-        public SwapchainSource Source;
+        public IntPtr WindowHandle;
         /// <summary>
         /// The initial width of the Swapchain surface.
         /// </summary>
@@ -38,8 +37,7 @@ namespace Vuldrid
         /// <summary>
         /// Constructs a new SwapchainDescription.
         /// </summary>
-        /// <param name="source">The <see cref="SwapchainSource"/> which will be used as the target of rendering operations.
-        /// This is a window-system-specific object which differs by platform.</param>
+        /// <param name="windowHandle">The native window handle which will be used as the target of rendering operations.</param>
         /// <param name="width">The initial width of the Swapchain surface.</param>
         /// <param name="height">The initial height of the Swapchain surface.</param>
         /// <param name="depthFormat">The optional format of the depth target of the Swapchain's Framebuffer.
@@ -48,13 +46,13 @@ namespace Vuldrid
         /// <param name="syncToVerticalBlank">Indicates whether presentation of the Swapchain will be synchronized to the window
         /// system's vertical refresh rate.</param>
         public SwapchainDescription(
-            SwapchainSource source,
+            IntPtr windowHandle,
             uint width,
             uint height,
             PixelFormat? depthFormat,
             bool syncToVerticalBlank)
         {
-            Source = source;
+            WindowHandle = windowHandle;
             Width = width;
             Height = height;
             DepthFormat = depthFormat;
@@ -65,8 +63,7 @@ namespace Vuldrid
         /// <summary>
         /// Constructs a new SwapchainDescription.
         /// </summary>
-        /// <param name="source">The <see cref="SwapchainSource"/> which will be used as the target of rendering operations.
-        /// This is a window-system-specific object which differs by platform.</param>
+        /// <param name="windowHandle">The native window handle which will be used as the target of rendering operations.</param>
         /// <param name="width">The initial width of the Swapchain surface.</param>
         /// <param name="height">The initial height of the Swapchain surface.</param>
         /// <param name="depthFormat">The optional format of the depth target of the Swapchain's Framebuffer.
@@ -76,14 +73,14 @@ namespace Vuldrid
         /// system's vertical refresh rate.</param>
         /// <param name="colorSrgb">Indicates whether the color target of the Swapchain will use an sRGB PixelFormat.</param>
         public SwapchainDescription(
-            SwapchainSource source,
+            IntPtr windowHandle,
             uint width,
             uint height,
             PixelFormat? depthFormat,
             bool syncToVerticalBlank,
             bool colorSrgb)
         {
-            Source = source;
+            WindowHandle = windowHandle;
             Width = width;
             Height = height;
             DepthFormat = depthFormat;
@@ -98,7 +95,7 @@ namespace Vuldrid
         /// <returns>True if all elements are equal; false otherswise.</returns>
         public bool Equals(SwapchainDescription other)
         {
-            return Source.Equals(other.Source)
+            return WindowHandle.Equals(other.WindowHandle)
                 && Width.Equals(other.Width)
                 && Height.Equals(other.Height)
                 && DepthFormat == other.DepthFormat
@@ -113,7 +110,7 @@ namespace Vuldrid
         public override int GetHashCode()
         {
             return HashHelper.Combine(
-                Source.GetHashCode(),
+                WindowHandle.GetHashCode(),
                 Width.GetHashCode(),
                 Height.GetHashCode(),
                 DepthFormat.GetHashCode(),

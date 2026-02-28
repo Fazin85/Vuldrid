@@ -6,11 +6,12 @@
     <DocumentationFile>$(BinDir)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn Condition="'$(Configuration)' == 'Debug'">1591</NoWarn>
     <DefineConstants>$(DefineConstants);VALIDATE_USAGE</DefineConstants>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>14.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Vk" Version="1.0.25" />
+    <PackageReference Include="Silk.NET.GLFW" Version="2.23.0" />
   </ItemGroup>
 
 </Project>

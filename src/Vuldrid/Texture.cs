@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Vuldrid
 {
@@ -8,7 +9,7 @@ namespace Vuldrid
     /// </summary>
     public abstract class Texture : DeviceResource, MappableResource, IDisposable, BindableResource
     {
-        private readonly object _fullTextureViewLock = new object();
+        private readonly Lock _fullTextureViewLock = new();
         private TextureView _fullTextureView;
 
         /// <summary>

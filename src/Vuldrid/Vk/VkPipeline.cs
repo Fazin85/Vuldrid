@@ -48,7 +48,7 @@ namespace Vuldrid.Vk
             for (int i = 0; i < attachmentsCount; i++)
             {
                 BlendAttachmentDescription vdDesc = description.BlendState.AttachmentStates[i];
-                VkPipelineColorBlendAttachmentState attachmentState = new VkPipelineColorBlendAttachmentState();
+                VkPipelineColorBlendAttachmentState attachmentState = new();
                 attachmentState.srcColorBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.SourceColorFactor);
                 attachmentState.dstColorBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.DestinationColorFactor);
                 attachmentState.colorBlendOp = VkFormats.VdToVkBlendOp(vdDesc.ColorFunction);
@@ -218,7 +218,7 @@ namespace Vuldrid.Vk
             }
 
             Shader[] shaders = description.ShaderSet.Shaders;
-            StackList<VkPipelineShaderStageCreateInfo> stages = new StackList<VkPipelineShaderStageCreateInfo>();
+            StackList<VkPipelineShaderStageCreateInfo> stages = new();
             foreach (Shader shader in shaders)
             {
                 VkShader vkShader = Util.AssertSubtype<Shader, VkShader>(shader);
@@ -259,12 +259,12 @@ namespace Vuldrid.Vk
 
             VkRenderPassCreateInfo renderPassCI = VkRenderPassCreateInfo.New();
             OutputDescription outputDesc = description.Outputs;
-            StackList<VkAttachmentDescription, Size512Bytes> attachments = new StackList<VkAttachmentDescription, Size512Bytes>();
+            StackList<VkAttachmentDescription, Size512Bytes> attachments = new();
 
             // TODO: A huge portion of this next part is duplicated in VkFramebuffer.cs.
 
-            StackList<VkAttachmentDescription> colorAttachmentDescs = new StackList<VkAttachmentDescription>();
-            StackList<VkAttachmentReference> colorAttachmentRefs = new StackList<VkAttachmentReference>();
+            StackList<VkAttachmentDescription> colorAttachmentDescs = new();
+            StackList<VkAttachmentReference> colorAttachmentRefs = new();
             for (uint i = 0; i < outputDesc.ColorAttachments.Length; i++)
             {
                 colorAttachmentDescs[i].format = VkFormats.VdToVkPixelFormat(outputDesc.ColorAttachments[i].Format);
@@ -281,8 +281,8 @@ namespace Vuldrid.Vk
                 colorAttachmentRefs[i].layout = VkImageLayout.ColorAttachmentOptimal;
             }
 
-            VkAttachmentDescription depthAttachmentDesc = new VkAttachmentDescription();
-            VkAttachmentReference depthAttachmentRef = new VkAttachmentReference();
+            VkAttachmentDescription depthAttachmentDesc = new();
+            VkAttachmentReference depthAttachmentRef = new();
             if (outputDesc.DepthAttachment != null)
             {
                 PixelFormat depthFormat = outputDesc.DepthAttachment.Value.Format;
@@ -300,7 +300,7 @@ namespace Vuldrid.Vk
                 depthAttachmentRef.layout = VkImageLayout.DepthStencilAttachmentOptimal;
             }
 
-            VkSubpassDescription subpass = new VkSubpassDescription();
+            VkSubpassDescription subpass = new();
             subpass.pipelineBindPoint = VkPipelineBindPoint.Graphics;
             subpass.colorAttachmentCount = (uint)outputDesc.ColorAttachments.Length;
             subpass.pColorAttachments = (VkAttachmentReference*)colorAttachmentRefs.Data;
@@ -315,7 +315,7 @@ namespace Vuldrid.Vk
                 attachments.Add(depthAttachmentDesc);
             }
 
-            VkSubpassDependency subpassDependency = new VkSubpassDependency();
+            VkSubpassDependency subpassDependency = new();
             subpassDependency.srcSubpass = SubpassExternal;
             subpassDependency.srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
             subpassDependency.dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput;

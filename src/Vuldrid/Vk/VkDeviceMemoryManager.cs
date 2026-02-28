@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System;
 using Veldrid;
+using System.Threading;
 
 namespace Vuldrid.Vk
 {
@@ -15,10 +16,10 @@ namespace Vuldrid.Vk
         private readonly VkDevice _device;
         private readonly VkPhysicalDevice _physicalDevice;
         private readonly ulong _bufferImageGranularity;
-        private readonly object _lock = new object();
+        private readonly Lock _lock = new();
         private ulong _totalAllocatedBytes;
-        private readonly Dictionary<uint, ChunkAllocatorSet> _allocatorsByMemoryTypeUnmapped = new Dictionary<uint, ChunkAllocatorSet>();
-        private readonly Dictionary<uint, ChunkAllocatorSet> _allocatorsByMemoryType = new Dictionary<uint, ChunkAllocatorSet>();
+        private readonly Dictionary<uint, ChunkAllocatorSet> _allocatorsByMemoryTypeUnmapped = [];
+        private readonly Dictionary<uint, ChunkAllocatorSet> _allocatorsByMemoryType = [];
 
         private readonly vkGetBufferMemoryRequirements2_t _getBufferMemoryRequirements2;
         private readonly vkGetImageMemoryRequirements2_t _getImageMemoryRequirements2;
@@ -196,7 +197,7 @@ namespace Vuldrid.Vk
             private readonly VkDevice _device;
             private readonly uint _memoryTypeIndex;
             private readonly bool _persistentMapped;
-            private readonly List<ChunkAllocator> _allocators = new List<ChunkAllocator>();
+            private readonly List<ChunkAllocator> _allocators = [];
 
             public ChunkAllocatorSet(VkDevice device, uint memoryTypeIndex, bool persistentMapped)
             {
@@ -215,7 +216,7 @@ namespace Vuldrid.Vk
                     }
                 }
 
-                ChunkAllocator newAllocator = new ChunkAllocator(_device, _memoryTypeIndex, _persistentMapped);
+                ChunkAllocator newAllocator = new(_device, _memoryTypeIndex, _persistentMapped);
                 _allocators.Add(newAllocator);
                 return newAllocator.Allocate(size, alignment, out block);
             }
@@ -247,7 +248,7 @@ namespace Vuldrid.Vk
             private readonly VkDevice _device;
             private readonly uint _memoryTypeIndex;
             private readonly bool _persistentMapped;
-            private readonly List<VkMemoryBlock> _freeBlocks = new List<VkMemoryBlock>();
+            private readonly List<VkMemoryBlock> _freeBlocks = [];
             private readonly VkDeviceMemory _memory;
             private readonly void* _mappedPtr;
 
@@ -277,7 +278,7 @@ namespace Vuldrid.Vk
                 }
                 _mappedPtr = mappedPtr;
 
-                VkMemoryBlock initialBlock = new VkMemoryBlock(
+                VkMemoryBlock initialBlock = new(
                     _memory,
                     0,
                     _totalMemorySize,
@@ -319,7 +320,7 @@ namespace Vuldrid.Vk
 
                             if (alignedBlockSize != size)
                             {
-                                VkMemoryBlock splitBlock = new VkMemoryBlock(
+                                VkMemoryBlock splitBlock = new(
                                     freeBlock.DeviceMemory,
                                     freeBlock.Offset + size,
                                     freeBlock.Size - size,
@@ -382,7 +383,7 @@ namespace Vuldrid.Vk
                     {
                         ulong blockEnd = _freeBlocks[i + contiguousLength - 1].End;
                         _freeBlocks.RemoveRange(i, contiguousLength);
-                        VkMemoryBlock mergedBlock = new VkMemoryBlock(
+                        VkMemoryBlock mergedBlock = new(
                             Memory,
                             blockStart,
                             blockEnd - blockStart,
@@ -396,7 +397,7 @@ namespace Vuldrid.Vk
             }
 
 #if DEBUG
-            private readonly List<VkMemoryBlock> _allocatedBlocks = new List<VkMemoryBlock>();
+            private readonly List<VkMemoryBlock> _allocatedBlocks = [];
 
             private void CheckAllocatedBlock(VkMemoryBlock block)
             {
@@ -408,7 +409,7 @@ namespace Vuldrid.Vk
                 _allocatedBlocks.Add(block);
             }
 
-            private bool BlocksOverlap(VkMemoryBlock first, VkMemoryBlock second)
+            private static bool BlocksOverlap(VkMemoryBlock first, VkMemoryBlock second)
             {
                 ulong firstStart = first.Offset;
                 ulong firstEnd = first.Offset + first.Size;

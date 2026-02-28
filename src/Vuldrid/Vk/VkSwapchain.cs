@@ -18,7 +18,6 @@ namespace Vuldrid.Vk
         private readonly uint _presentQueueIndex;
         private readonly VkQueue _presentQueue;
         private bool _syncToVBlank;
-        private readonly SwapchainSource _swapchainSource;
         private readonly bool _colorSrgb;
         private bool? _newSyncToVBlank;
         private uint _currentImageIndex;
@@ -55,7 +54,6 @@ namespace Vuldrid.Vk
         {
             _gd = gd;
             _syncToVBlank = description.SyncToVerticalBlank;
-            _swapchainSource = description.Source;
             _colorSrgb = description.ColorSrgb;
 
             if (existingSurface == VkSurfaceKHR.Null)
@@ -168,7 +166,7 @@ namespace Vuldrid.Vk
                 ? VkFormat.B8g8r8a8Srgb
                 : VkFormat.B8g8r8a8Unorm;
 
-            VkSurfaceFormatKHR surfaceFormat = new VkSurfaceFormatKHR();
+            VkSurfaceFormatKHR surfaceFormat = new();
             if (formats.Length == 1 && formats[0].format == VkFormat.Undefined)
             {
                 surfaceFormat = new VkSurfaceFormatKHR { colorSpace = VkColorSpaceKHR.SrgbNonlinearKHR, format = desiredFormat };
@@ -237,7 +235,7 @@ namespace Vuldrid.Vk
             swapchainCI.imageArrayLayers = 1;
             swapchainCI.imageUsage = VkImageUsageFlags.ColorAttachment | VkImageUsageFlags.TransferDst;
 
-            FixedArray2<uint> queueFamilyIndices = new FixedArray2<uint>(_gd.GraphicsQueueIndex, _gd.PresentQueueIndex);
+            FixedArray2<uint> queueFamilyIndices = new(_gd.GraphicsQueueIndex, _gd.PresentQueueIndex);
 
             if (_gd.GraphicsQueueIndex != _gd.PresentQueueIndex)
             {

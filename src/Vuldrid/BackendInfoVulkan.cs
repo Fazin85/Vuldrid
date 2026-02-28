@@ -74,7 +74,7 @@ namespace Vuldrid
         /// </summary>
         /// <param name="texture">The Texture whose currently-tracked VkImageLayout will be overridden.</param>
         /// <param name="layout">The new VkImageLayout value.</param>
-        public void OverrideImageLayout(Texture texture, uint layout)
+        public static void OverrideImageLayout(Texture texture, uint layout)
         {
             VkTexture vkTex = Util.AssertSubtype<Texture, VkTexture>(texture);
             for (uint layer = 0; layer < vkTex.ArrayLayers; layer++)

@@ -277,7 +277,7 @@ namespace Vuldrid.Vk
                 VkImageAspectFlags aspect = (Usage & TextureUsage.DepthStencil) == TextureUsage.DepthStencil
                   ? (VkImageAspectFlags.Depth | VkImageAspectFlags.Stencil)
                   : VkImageAspectFlags.Color;
-                VkImageSubresource imageSubresource = new VkImageSubresource
+                VkImageSubresource imageSubresource = new()
                 {
                     arrayLayer = arrayLayer,
                     mipLevel = mipLevel,
@@ -294,7 +294,7 @@ namespace Vuldrid.Vk
                 uint rowPitch = FormatHelpers.GetRowPitch(mipWidth, Format);
                 uint depthPitch = FormatHelpers.GetDepthPitch(rowPitch, mipHeight, Format);
 
-                VkSubresourceLayout layout = new VkSubresourceLayout()
+                VkSubresourceLayout layout = new()
                 {
                     rowPitch = rowPitch,
                     depthPitch = depthPitch,

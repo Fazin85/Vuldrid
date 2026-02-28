@@ -15,7 +15,7 @@ namespace Vuldrid.Vk
         private readonly VkRenderPass _renderPassNoClearLoad;
         private readonly VkRenderPass _renderPassNoClear;
         private readonly VkRenderPass _renderPassClear;
-        private readonly List<VkImageView> _attachmentViews = new List<VkImageView>();
+        private readonly List<VkImageView> _attachmentViews = [];
         private bool _destroyed;
         private string _name;
 
@@ -38,14 +38,14 @@ namespace Vuldrid.Vk
 
             VkRenderPassCreateInfo renderPassCI = VkRenderPassCreateInfo.New();
 
-            StackList<VkAttachmentDescription> attachments = new StackList<VkAttachmentDescription>();
+            StackList<VkAttachmentDescription> attachments = new();
 
             uint colorAttachmentCount = (uint)ColorTargets.Count;
-            StackList<VkAttachmentReference> colorAttachmentRefs = new StackList<VkAttachmentReference>();
+            StackList<VkAttachmentReference> colorAttachmentRefs = new();
             for (int i = 0; i < colorAttachmentCount; i++)
             {
                 VkTexture vkColorTex = Util.AssertSubtype<Texture, VkTexture>(ColorTargets[i].Target);
-                VkAttachmentDescription colorAttachmentDesc = new VkAttachmentDescription();
+                VkAttachmentDescription colorAttachmentDesc = new();
                 colorAttachmentDesc.format = vkColorTex.VkFormat;
                 colorAttachmentDesc.samples = vkColorTex.VkSampleCount;
                 colorAttachmentDesc.loadOp = VkAttachmentLoadOp.Load;
@@ -60,14 +60,14 @@ namespace Vuldrid.Vk
                 colorAttachmentDesc.finalLayout = VkImageLayout.ColorAttachmentOptimal;
                 attachments.Add(colorAttachmentDesc);
 
-                VkAttachmentReference colorAttachmentRef = new VkAttachmentReference();
+                VkAttachmentReference colorAttachmentRef = new();
                 colorAttachmentRef.attachment = (uint)i;
                 colorAttachmentRef.layout = VkImageLayout.ColorAttachmentOptimal;
                 colorAttachmentRefs.Add(colorAttachmentRef);
             }
 
-            VkAttachmentDescription depthAttachmentDesc = new VkAttachmentDescription();
-            VkAttachmentReference depthAttachmentRef = new VkAttachmentReference();
+            VkAttachmentDescription depthAttachmentDesc = new();
+            VkAttachmentReference depthAttachmentRef = new();
             if (DepthTarget != null)
             {
                 VkTexture vkDepthTex = Util.AssertSubtype<Texture, VkTexture>(DepthTarget.Value.Target);
@@ -89,7 +89,7 @@ namespace Vuldrid.Vk
                 depthAttachmentRef.layout = VkImageLayout.DepthStencilAttachmentOptimal;
             }
 
-            VkSubpassDescription subpass = new VkSubpassDescription();
+            VkSubpassDescription subpass = new();
             subpass.pipelineBindPoint = VkPipelineBindPoint.Graphics;
             if (ColorTargets.Count > 0)
             {
@@ -103,7 +103,7 @@ namespace Vuldrid.Vk
                 attachments.Add(depthAttachmentDesc);
             }
 
-            VkSubpassDependency subpassDependency = new VkSubpassDependency();
+            VkSubpassDependency subpassDependency = new();
             subpassDependency.srcSubpass = SubpassExternal;
             subpassDependency.srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
             subpassDependency.dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
