@@ -6,6 +6,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="Vuldrid/Vuldrid.csproj" />
+  <Project Path="Vuldrid.Examples/Vuldrid.Examples.csproj" />
   <Properties Name="Performance">
     <Property Name="HasPerformanceSessions" Value="true" />
   </Properties>

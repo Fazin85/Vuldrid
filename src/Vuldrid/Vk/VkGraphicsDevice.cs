@@ -58,6 +58,7 @@ namespace Vuldrid.Vk
         private vkGetBufferMemoryRequirements2_t _getBufferMemoryRequirements2;
         private vkGetImageMemoryRequirements2_t _getImageMemoryRequirements2;
         private vkGetPhysicalDeviceProperties2_t _getPhysicalDeviceProperties2;
+        private readonly HashSet<string> _instanceExtensions = [];
         private vkCreateMetalSurfaceEXT_t _createMetalSurfaceEXT;
 
         // Staging Resources
@@ -122,7 +123,6 @@ namespace Vuldrid.Vk
         private readonly List<FenceSubmissionInfo> _submittedFences = [];
         private readonly VkSwapchain _mainSwapchain;
 
-        private readonly List<FixedUtf8String> _surfaceExtensions = [];
 
         public VkGraphicsDevice(GraphicsDeviceOptions options, SwapchainDescription? scDesc)
             : this(options, scDesc, new VulkanDeviceOptions()) { }
@@ -190,13 +190,11 @@ namespace Vuldrid.Vk
 
         private static VkSurfaceKHR CreateSurface(VkInstance instance, IntPtr windowHandle)
         {
-            VkSurfaceKHR surface;
+            VkNonDispatchableHandle surfaceHandle;
             var glfw = Glfw.GetApi();
-            VkNonDispatchableHandle* surfaceHandle = default;
-            VkResult result = (VkResult)glfw.CreateWindowSurface(new(instance.Handle), (WindowHandle*)windowHandle, null, surfaceHandle);
+            VkResult result = (VkResult)glfw.CreateWindowSurface(new VkHandle(instance.Handle), (WindowHandle*)windowHandle, null, &surfaceHandle);
             CheckResult(result);
-            surface = new VkSurfaceKHR(surfaceHandle->Handle);
-            return surface;
+            return new VkSurfaceKHR(surfaceHandle.Handle);
         }
 
         public override ResourceFactory ResourceFactory { get; }
@@ -484,70 +482,13 @@ namespace Vuldrid.Vk
             StackList<IntPtr, Size64Bytes> instanceExtensions = new();
             StackList<IntPtr, Size64Bytes> instanceLayers = new();
 
-            if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_portability_subset))
+            var glfw = Glfw.GetApi();
+            byte** glfwExtensions = glfw.GetRequiredInstanceExtensions(out uint glfwExtensionCount);
+            for (uint i = 0; i < glfwExtensionCount; i++)
             {
-                _surfaceExtensions.Add(CommonStrings.VK_KHR_portability_subset);
-            }
-
-            if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_portability_enumeration))
-            {
-                instanceExtensions.Add(CommonStrings.VK_KHR_portability_enumeration);
-                instanceCI.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
-            }
-
-            if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_SURFACE_EXTENSION_NAME))
-            {
-                _surfaceExtensions.Add(CommonStrings.VK_KHR_SURFACE_EXTENSION_NAME);
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_WIN32_SURFACE_EXTENSION_NAME))
-                {
-                    _surfaceExtensions.Add(CommonStrings.VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
-                }
-            }
-            else if (
-#if NET5_0_OR_GREATER
-                OperatingSystem.IsAndroid() ||
-#endif
-                RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_ANDROID_SURFACE_EXTENSION_NAME))
-                {
-                    _surfaceExtensions.Add(CommonStrings.VK_KHR_ANDROID_SURFACE_EXTENSION_NAME);
-                }
-                if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_XLIB_SURFACE_EXTENSION_NAME))
-                {
-                    _surfaceExtensions.Add(CommonStrings.VK_KHR_XLIB_SURFACE_EXTENSION_NAME);
-                }
-                if (availableInstanceExtensions.Contains(CommonStrings.VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME))
-                {
-                    _surfaceExtensions.Add(CommonStrings.VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME);
-                }
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                if (availableInstanceExtensions.Contains(CommonStrings.VK_EXT_METAL_SURFACE_EXTENSION_NAME))
-                {
-                    _surfaceExtensions.Add(CommonStrings.VK_EXT_METAL_SURFACE_EXTENSION_NAME);
-                }
-                else // Legacy MoltenVK extensions
-                {
-                    if (availableInstanceExtensions.Contains(CommonStrings.VK_MVK_MACOS_SURFACE_EXTENSION_NAME))
-                    {
-                        _surfaceExtensions.Add(CommonStrings.VK_MVK_MACOS_SURFACE_EXTENSION_NAME);
-                    }
-                    if (availableInstanceExtensions.Contains(CommonStrings.VK_MVK_IOS_SURFACE_EXTENSION_NAME))
-                    {
-                        _surfaceExtensions.Add(CommonStrings.VK_MVK_IOS_SURFACE_EXTENSION_NAME);
-                    }
-                }
-            }
-
-            foreach (var ext in _surfaceExtensions)
-            {
-                instanceExtensions.Add(ext);
+                string extName = Util.GetString(glfwExtensions[i]);
+                _instanceExtensions.Add(extName);
+                instanceExtensions.Add((IntPtr)glfwExtensions[i]);
             }
 
             bool hasDeviceProperties2 = availableInstanceExtensions.Contains(CommonStrings.VK_KHR_get_physical_device_properties2);
@@ -602,7 +543,7 @@ namespace Vuldrid.Vk
             VkResult result = vkCreateInstance(ref instanceCI, null, out _instance);
             CheckResult(result);
 
-            if (HasSurfaceExtension(CommonStrings.VK_EXT_METAL_SURFACE_EXTENSION_NAME))
+            if (availableInstanceExtensions.Contains(CommonStrings.VK_EXT_METAL_SURFACE_EXTENSION_NAME))
             {
                 _createMetalSurfaceEXT = GetInstanceProcAddr<vkCreateMetalSurfaceEXT_t>("vkCreateMetalSurfaceEXT");
             }
@@ -626,7 +567,7 @@ namespace Vuldrid.Vk
 
         public bool HasSurfaceExtension(FixedUtf8String extension)
         {
-            return _surfaceExtensions.Contains(extension);
+            return _instanceExtensions.Contains(extension.ToString());
         }
 
         public void EnableDebugCallback(VkDebugReportFlagsEXT flags = VkDebugReportFlagsEXT.WarningEXT | VkDebugReportFlagsEXT.ErrorEXT)
