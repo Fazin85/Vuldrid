@@ -1,14 +1,12 @@
 ﻿using System;
-using Vulkan;
-using static Vulkan.VulkanNative;
-using static Vuldrid.Vk.VulkanUtil;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Text;
-
-using static Vulkan.RawConstants;
 using Veldrid.Vk;
+using Vulkan;
+using static Vuldrid.Vk.VulkanUtil;
+using static Vulkan.RawConstants;
+using static Vulkan.VulkanNative;
 
 namespace Vuldrid.Vk
 {

@@ -891,22 +891,15 @@ namespace Vuldrid
         /// <returns>True if the GraphicsBackend is supported; false otherwise.</returns>
         public static bool IsBackendSupported(GraphicsBackend backend)
         {
-            switch (backend)
+            return backend switch
             {
-                case GraphicsBackend.Direct3D11:
-                    return false;
-                case GraphicsBackend.Vulkan:
-                    return VkGraphicsDevice.IsSupported();
-                    return false;
-                case GraphicsBackend.OpenGL:
-                    return false;
-                case GraphicsBackend.Metal:
-                    return false;
-                case GraphicsBackend.OpenGLES:
-                    return false;
-                default:
-                    throw Illegal.Value<GraphicsBackend>();
-            }
+                GraphicsBackend.Direct3D11 => false,
+                GraphicsBackend.Vulkan => VkGraphicsDevice.IsSupported(),
+                GraphicsBackend.OpenGL => false,
+                GraphicsBackend.Metal => false,
+                GraphicsBackend.OpenGLES => false,
+                _ => throw Illegal.Value<GraphicsBackend>(),
+            };
         }
 
 #if !EXCLUDE_VULKAN_BACKEND
