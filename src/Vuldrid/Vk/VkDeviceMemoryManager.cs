@@ -251,7 +251,7 @@ namespace Vuldrid.Vk
             private readonly VkDeviceMemory _memory;
             private readonly void* _mappedPtr;
 
-            private ulong _totalMemorySize;
+            private readonly ulong _totalMemorySize;
             private ulong _totalAllocatedBytes = 0;
 
             public VkDeviceMemory Memory => _memory;
@@ -396,7 +396,7 @@ namespace Vuldrid.Vk
             }
 
 #if DEBUG
-            private List<VkMemoryBlock> _allocatedBlocks = new List<VkMemoryBlock>();
+            private readonly List<VkMemoryBlock> _allocatedBlocks = new List<VkMemoryBlock>();
 
             private void CheckAllocatedBlock(VkMemoryBlock block)
             {

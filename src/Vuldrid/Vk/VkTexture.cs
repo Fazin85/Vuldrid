@@ -51,8 +51,8 @@ namespace Vuldrid.Vk
         public VkFormat VkFormat { get; }
         public VkSampleCountFlags VkSampleCount { get; }
 
-        private VkImageLayout[] _imageLayouts;
-        private bool _isSwapchainTexture;
+        private readonly VkImageLayout[] _imageLayouts;
+        private readonly bool _isSwapchainTexture;
         private string _name;
 
         public ResourceRefCount RefCount { get; }

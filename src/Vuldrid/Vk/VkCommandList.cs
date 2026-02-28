@@ -13,7 +13,7 @@ namespace Vuldrid.Vk
     internal unsafe class VkCommandList : CommandList
     {
         private readonly VkGraphicsDevice _gd;
-        private VkCommandPool _pool;
+        private readonly VkCommandPool _pool;
         private VkCommandBuffer _cb;
         private bool _destroyed;
 
@@ -476,10 +476,7 @@ namespace Vuldrid.Vk
                 EndCurrentRenderPass();
             }
 
-            if (_currentFramebuffer != null)
-            {
-                _currentFramebuffer.TransitionToFinalLayout(_cb);
-            }
+            _currentFramebuffer?.TransitionToFinalLayout(_cb);
 
             VkFramebufferBase vkFB = Util.AssertSubtype<Framebuffer, VkFramebufferBase>(fb);
             _currentFramebuffer = vkFB;

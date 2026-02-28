@@ -7,7 +7,7 @@ namespace Vuldrid.Vk
     internal unsafe class VkFence : Fence
     {
         private readonly VkGraphicsDevice _gd;
-        private Vulkan.VkFence _fence;
+        private readonly Vulkan.VkFence _fence;
         private string _name;
         private bool _destroyed;
 

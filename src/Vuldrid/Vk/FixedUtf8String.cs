@@ -8,16 +8,13 @@ namespace Vuldrid.Vk
     internal unsafe class FixedUtf8String : IDisposable
     {
         private GCHandle _handle;
-        private uint _numBytes;
+        private readonly uint _numBytes;
 
         public byte* StringPtr => (byte*)_handle.AddrOfPinnedObject().ToPointer();
 
         public FixedUtf8String(string s)
         {
-            if (s == null)
-            {
-                throw new ArgumentNullException(nameof(s));
-            }
+            ArgumentNullException.ThrowIfNull(s);
 
             int byteCount = Encoding.UTF8.GetByteCount(s);
             byte[] text = new byte[byteCount + 1];
