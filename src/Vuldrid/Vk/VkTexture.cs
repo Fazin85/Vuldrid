@@ -240,7 +240,7 @@ namespace Vuldrid.Vk
             SampleCount = sampleCount;
             VkSampleCount = VkFormats.VdToVkSampleCount(sampleCount);
             _optimalImage = existingImage;
-            _imageLayouts = new[] { VkImageLayout.Undefined };
+            _imageLayouts = [VkImageLayout.Undefined];
             _isSwapchainTexture = true;
 
             ClearIfRenderTarget();
@@ -300,8 +300,8 @@ namespace Vuldrid.Vk
                     depthPitch = depthPitch,
                     arrayPitch = depthPitch,
                     size = depthPitch,
+                    offset = Util.ComputeSubresourceOffset(this, mipLevel, arrayLayer)
                 };
-                layout.offset = Util.ComputeSubresourceOffset(this, mipLevel, arrayLayer);
 
                 return layout;
             }

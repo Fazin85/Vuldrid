@@ -45,24 +45,28 @@ namespace Vuldrid.Vk
             for (int i = 0; i < colorAttachmentCount; i++)
             {
                 VkTexture vkColorTex = Util.AssertSubtype<Texture, VkTexture>(ColorTargets[i].Target);
-                VkAttachmentDescription colorAttachmentDesc = new();
-                colorAttachmentDesc.format = vkColorTex.VkFormat;
-                colorAttachmentDesc.samples = vkColorTex.VkSampleCount;
-                colorAttachmentDesc.loadOp = VkAttachmentLoadOp.Load;
-                colorAttachmentDesc.storeOp = VkAttachmentStoreOp.Store;
-                colorAttachmentDesc.stencilLoadOp = VkAttachmentLoadOp.DontCare;
-                colorAttachmentDesc.stencilStoreOp = VkAttachmentStoreOp.DontCare;
-                colorAttachmentDesc.initialLayout = isPresented
-                    ? VkImageLayout.PresentSrcKHR
-                    : ((vkColorTex.Usage & TextureUsage.Sampled) != 0)
-                        ? VkImageLayout.ShaderReadOnlyOptimal
-                        : VkImageLayout.ColorAttachmentOptimal;
-                colorAttachmentDesc.finalLayout = VkImageLayout.ColorAttachmentOptimal;
+                VkAttachmentDescription colorAttachmentDesc = new()
+                {
+                    format = vkColorTex.VkFormat,
+                    samples = vkColorTex.VkSampleCount,
+                    loadOp = VkAttachmentLoadOp.Load,
+                    storeOp = VkAttachmentStoreOp.Store,
+                    stencilLoadOp = VkAttachmentLoadOp.DontCare,
+                    stencilStoreOp = VkAttachmentStoreOp.DontCare,
+                    initialLayout = isPresented
+                        ? VkImageLayout.PresentSrcKHR
+                        : ((vkColorTex.Usage & TextureUsage.Sampled) != 0)
+                            ? VkImageLayout.ShaderReadOnlyOptimal
+                            : VkImageLayout.ColorAttachmentOptimal,
+                    finalLayout = VkImageLayout.ColorAttachmentOptimal
+                };
                 attachments.Add(colorAttachmentDesc);
 
-                VkAttachmentReference colorAttachmentRef = new();
-                colorAttachmentRef.attachment = (uint)i;
-                colorAttachmentRef.layout = VkImageLayout.ColorAttachmentOptimal;
+                VkAttachmentReference colorAttachmentRef = new()
+                {
+                    attachment = (uint)i,
+                    layout = VkImageLayout.ColorAttachmentOptimal
+                };
                 colorAttachmentRefs.Add(colorAttachmentRef);
             }
 
@@ -89,8 +93,10 @@ namespace Vuldrid.Vk
                 depthAttachmentRef.layout = VkImageLayout.DepthStencilAttachmentOptimal;
             }
 
-            VkSubpassDescription subpass = new();
-            subpass.pipelineBindPoint = VkPipelineBindPoint.Graphics;
+            VkSubpassDescription subpass = new()
+            {
+                pipelineBindPoint = VkPipelineBindPoint.Graphics
+            };
             if (ColorTargets.Count > 0)
             {
                 subpass.colorAttachmentCount = colorAttachmentCount;
@@ -103,11 +109,13 @@ namespace Vuldrid.Vk
                 attachments.Add(depthAttachmentDesc);
             }
 
-            VkSubpassDependency subpassDependency = new();
-            subpassDependency.srcSubpass = SubpassExternal;
-            subpassDependency.srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
-            subpassDependency.dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
-            subpassDependency.dstAccessMask = VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite;
+            VkSubpassDependency subpassDependency = new()
+            {
+                srcSubpass = SubpassExternal,
+                srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput,
+                dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput,
+                dstAccessMask = VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite
+            };
 
             renderPassCI.attachmentCount = attachments.Count;
             renderPassCI.pAttachments = (VkAttachmentDescription*)attachments.Data;

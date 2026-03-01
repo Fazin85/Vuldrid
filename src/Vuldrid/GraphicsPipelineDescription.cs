@@ -105,7 +105,7 @@ namespace Vuldrid
             RasterizerState = rasterizerState;
             PrimitiveTopology = primitiveTopology;
             ShaderSet = shaderSet;
-            ResourceLayouts = new[] { resourceLayout };
+            ResourceLayouts = [resourceLayout];
             Outputs = outputs;
             ResourceBindingModel = null;
         }

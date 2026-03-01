@@ -48,15 +48,17 @@ namespace Vuldrid.Vk
             for (int i = 0; i < attachmentsCount; i++)
             {
                 BlendAttachmentDescription vdDesc = description.BlendState.AttachmentStates[i];
-                VkPipelineColorBlendAttachmentState attachmentState = new();
-                attachmentState.srcColorBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.SourceColorFactor);
-                attachmentState.dstColorBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.DestinationColorFactor);
-                attachmentState.colorBlendOp = VkFormats.VdToVkBlendOp(vdDesc.ColorFunction);
-                attachmentState.srcAlphaBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.SourceAlphaFactor);
-                attachmentState.dstAlphaBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.DestinationAlphaFactor);
-                attachmentState.alphaBlendOp = VkFormats.VdToVkBlendOp(vdDesc.AlphaFunction);
-                attachmentState.colorWriteMask = VkFormats.VdToVkColorWriteMask(vdDesc.ColorWriteMask.GetOrDefault());
-                attachmentState.blendEnable = vdDesc.BlendEnabled;
+                VkPipelineColorBlendAttachmentState attachmentState = new()
+                {
+                    srcColorBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.SourceColorFactor),
+                    dstColorBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.DestinationColorFactor),
+                    colorBlendOp = VkFormats.VdToVkBlendOp(vdDesc.ColorFunction),
+                    srcAlphaBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.SourceAlphaFactor),
+                    dstAlphaBlendFactor = VkFormats.VdToVkBlendFactor(vdDesc.DestinationAlphaFactor),
+                    alphaBlendOp = VkFormats.VdToVkBlendOp(vdDesc.AlphaFunction),
+                    colorWriteMask = VkFormats.VdToVkColorWriteMask(vdDesc.ColorWriteMask.GetOrDefault()),
+                    blendEnable = vdDesc.BlendEnabled
+                };
                 attachmentsPtr[i] = attachmentState;
             }
 
@@ -300,10 +302,12 @@ namespace Vuldrid.Vk
                 depthAttachmentRef.layout = VkImageLayout.DepthStencilAttachmentOptimal;
             }
 
-            VkSubpassDescription subpass = new();
-            subpass.pipelineBindPoint = VkPipelineBindPoint.Graphics;
-            subpass.colorAttachmentCount = (uint)outputDesc.ColorAttachments.Length;
-            subpass.pColorAttachments = (VkAttachmentReference*)colorAttachmentRefs.Data;
+            VkSubpassDescription subpass = new()
+            {
+                pipelineBindPoint = VkPipelineBindPoint.Graphics,
+                colorAttachmentCount = (uint)outputDesc.ColorAttachments.Length,
+                pColorAttachments = (VkAttachmentReference*)colorAttachmentRefs.Data
+            };
             for (int i = 0; i < colorAttachmentDescs.Count; i++)
             {
                 attachments.Add(colorAttachmentDescs[i]);
@@ -315,11 +319,13 @@ namespace Vuldrid.Vk
                 attachments.Add(depthAttachmentDesc);
             }
 
-            VkSubpassDependency subpassDependency = new();
-            subpassDependency.srcSubpass = SubpassExternal;
-            subpassDependency.srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
-            subpassDependency.dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput;
-            subpassDependency.dstAccessMask = VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite;
+            VkSubpassDependency subpassDependency = new()
+            {
+                srcSubpass = SubpassExternal,
+                srcStageMask = VkPipelineStageFlags.ColorAttachmentOutput,
+                dstStageMask = VkPipelineStageFlags.ColorAttachmentOutput,
+                dstAccessMask = VkAccessFlags.ColorAttachmentRead | VkAccessFlags.ColorAttachmentWrite
+            };
 
             renderPassCI.attachmentCount = attachments.Count;
             renderPassCI.pAttachments = (VkAttachmentDescription*)attachments.Data;

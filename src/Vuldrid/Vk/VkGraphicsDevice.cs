@@ -470,12 +470,14 @@ namespace Vuldrid.Vk
             HashSet<string> availableInstanceExtensions = new(GetInstanceExtensions());
 
             VkInstanceCreateInfo instanceCI = VkInstanceCreateInfo.New();
-            VkApplicationInfo applicationInfo = new();
-            applicationInfo.apiVersion = new VkVersion(1, 0, 0);
-            applicationInfo.applicationVersion = new VkVersion(1, 0, 0);
-            applicationInfo.engineVersion = new VkVersion(1, 0, 0);
-            applicationInfo.pApplicationName = s_name;
-            applicationInfo.pEngineName = s_name;
+            VkApplicationInfo applicationInfo = new()
+            {
+                apiVersion = new VkVersion(1, 0, 0),
+                applicationVersion = new VkVersion(1, 0, 0),
+                engineVersion = new VkVersion(1, 0, 0),
+                pApplicationName = s_name,
+                pEngineName = s_name
+            };
 
             instanceCI.pApplicationInfo = &applicationInfo;
 
@@ -497,7 +499,7 @@ namespace Vuldrid.Vk
                 instanceExtensions.Add(CommonStrings.VK_KHR_get_physical_device_properties2);
             }
 
-            string[] requestedInstanceExtensions = options.InstanceExtensions ?? Array.Empty<string>();
+            string[] requestedInstanceExtensions = options.InstanceExtensions ?? [];
             List<FixedUtf8String> tempStrings = [];
             foreach (string requiredExt in requestedInstanceExtensions)
             {
@@ -691,7 +693,7 @@ namespace Vuldrid.Vk
 
             VkExtensionProperties[] props = GetDeviceExtensionProperties();
 
-            HashSet<string> requiredInstanceExtensions = new(options.DeviceExtensions ?? Array.Empty<string>());
+            HashSet<string> requiredInstanceExtensions = new(options.DeviceExtensions ?? []);
 
             bool hasMemReqs2 = false;
             bool hasDedicatedAllocation = false;
@@ -1358,12 +1360,14 @@ namespace Vuldrid.Vk
             }
 
             VkInstanceCreateInfo instanceCI = VkInstanceCreateInfo.New();
-            VkApplicationInfo applicationInfo = new();
-            applicationInfo.apiVersion = new VkVersion(1, 0, 0);
-            applicationInfo.applicationVersion = new VkVersion(1, 0, 0);
-            applicationInfo.engineVersion = new VkVersion(1, 0, 0);
-            applicationInfo.pApplicationName = s_name;
-            applicationInfo.pEngineName = s_name;
+            VkApplicationInfo applicationInfo = new()
+            {
+                apiVersion = new VkVersion(1, 0, 0),
+                applicationVersion = new VkVersion(1, 0, 0),
+                engineVersion = new VkVersion(1, 0, 0),
+                pApplicationName = s_name,
+                pEngineName = s_name
+            };
 
             instanceCI.pApplicationInfo = &applicationInfo;
 

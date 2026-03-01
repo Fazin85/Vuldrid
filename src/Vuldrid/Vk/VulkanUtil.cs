@@ -45,7 +45,7 @@ namespace Vuldrid.Vk
             CheckResult(result);
             if (propCount == 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             VkLayerProperties[] props = new VkLayerProperties[propCount];
@@ -69,19 +69,19 @@ namespace Vuldrid.Vk
         {
             if (!IsVulkanLoaded())
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             uint propCount = 0;
             VkResult result = vkEnumerateInstanceExtensionProperties((byte*)null, ref propCount, null);
             if (result != VkResult.Success)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             if (propCount == 0)
             {
-                return Array.Empty<string>();
+                return [];
             }
 
             VkExtensionProperties[] props = new VkExtensionProperties[propCount];

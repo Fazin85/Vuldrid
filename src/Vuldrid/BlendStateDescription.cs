@@ -56,7 +56,7 @@ namespace Vuldrid
         /// </summary>
         public static readonly BlendStateDescription SingleOverrideBlend = new()
         {
-            AttachmentStates = new BlendAttachmentDescription[] { BlendAttachmentDescription.OverrideBlend }
+            AttachmentStates = [BlendAttachmentDescription.OverrideBlend]
         };
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Vuldrid
         /// </summary>
         public static readonly BlendStateDescription SingleAlphaBlend = new()
         {
-            AttachmentStates = new BlendAttachmentDescription[] { BlendAttachmentDescription.AlphaBlend }
+            AttachmentStates = [BlendAttachmentDescription.AlphaBlend]
         };
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Vuldrid
         /// </summary>
         public static readonly BlendStateDescription SingleAdditiveBlend = new()
         {
-            AttachmentStates = new BlendAttachmentDescription[] { BlendAttachmentDescription.AdditiveBlend }
+            AttachmentStates = [BlendAttachmentDescription.AdditiveBlend]
         };
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Vuldrid
         /// </summary>
         public static readonly BlendStateDescription SingleDisabled = new()
         {
-            AttachmentStates = new BlendAttachmentDescription[] { BlendAttachmentDescription.Disabled }
+            AttachmentStates = [BlendAttachmentDescription.Disabled]
         };
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Vuldrid
         /// </summary>
         public static readonly BlendStateDescription Empty = new()
         {
-            AttachmentStates = Array.Empty<BlendAttachmentDescription>()
+            AttachmentStates = []
         };
 
         /// <summary>

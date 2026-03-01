@@ -20,10 +20,10 @@ namespace Vuldrid.Vk
 
         private bool _commandBufferBegun;
         private bool _commandBufferEnded;
-        private VkRect2D[] _scissorRects = Array.Empty<VkRect2D>();
+        private VkRect2D[] _scissorRects = [];
 
-        private VkClearValue[] _clearValues = Array.Empty<VkClearValue>();
-        private bool[] _validColorClearValues = Array.Empty<bool>();
+        private VkClearValue[] _clearValues = [];
+        private bool[] _validColorClearValues = [];
         private VkClearValue? _depthClearValue;
         private readonly List<VkTexture> _preDrawSampledImages = [];
 
@@ -32,14 +32,14 @@ namespace Vuldrid.Vk
         private bool _currentFramebufferEverActive;
         private VkRenderPass _activeRenderPass;
         private VkPipeline _currentGraphicsPipeline;
-        private BoundResourceSetInfo[] _currentGraphicsResourceSets = Array.Empty<BoundResourceSetInfo>();
+        private BoundResourceSetInfo[] _currentGraphicsResourceSets = [];
         private bool[] _graphicsResourceSetsChanged;
 
         private bool _newFramebuffer; // Render pass cycle state
 
         // Compute State
         private VkPipeline _currentComputePipeline;
-        private BoundResourceSetInfo[] _currentComputeResourceSets = Array.Empty<BoundResourceSetInfo>();
+        private BoundResourceSetInfo[] _currentComputeResourceSets = [];
         private bool[] _computeResourceSetsChanged;
         private string _name;
 

@@ -16,7 +16,7 @@ namespace Vuldrid.Vk
         private uint _currentImageIndex;
 
         private VkFramebuffer[] _scFramebuffers;
-        private VkImage[] _scImages = {};
+        private VkImage[] _scImages = [];
         private VkFormat _scImageFormat;
         private VkExtent2D _scExtent;
         private FramebufferAttachment[][] _scColorTextures;
@@ -164,7 +164,7 @@ namespace Vuldrid.Vk
                 FramebufferDescription desc = new(_depthAttachment?.Target, colorTex);
                 VkFramebuffer fb = new(_gd, ref desc, true);
                 _scFramebuffers[i] = fb;
-                _scColorTextures[i] = new FramebufferAttachment[] { new(colorTex, 0) };
+                _scColorTextures[i] = [new(colorTex, 0)];
             }
         }
 
