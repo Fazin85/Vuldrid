@@ -7,7 +7,21 @@
     <NoWarn Condition="'$(Configuration)' == 'Debug'">1591</NoWarn>
     <DefineConstants>$(DefineConstants);VALIDATE_USAGE</DefineConstants>
     <LangVersion>14.0</LangVersion>
+    
+    <!-- NuGet Packaging Properties -->
+    <PackageId>Vuldrid</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Fazin85</Authors>
+    <Description>Vuldrid Graphics Library</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Fazin85/Vuldrid</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Vk" Version="1.0.25" />
