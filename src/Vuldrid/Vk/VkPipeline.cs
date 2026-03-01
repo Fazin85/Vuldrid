@@ -1,10 +1,10 @@
-﻿using Vulkan;
-using static Vulkan.VulkanNative;
-using static Vuldrid.Vk.VulkanUtil;
-using System;
-using System.Diagnostics;
+﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Veldrid.Vk;
+using Vulkan;
+using static Vuldrid.Vk.VulkanUtil;
+using static Vulkan.VulkanNative;
 
 namespace Vuldrid.Vk
 {
@@ -344,7 +344,7 @@ namespace Vuldrid.Vk
 
             ResourceSetCount = (uint)description.ResourceLayouts.Length;
             DynamicOffsetsCount = 0;
-            foreach (VkResourceLayout layout in description.ResourceLayouts)
+            foreach (VkResourceLayout layout in description.ResourceLayouts.Cast<VkResourceLayout>())
             {
                 DynamicOffsetsCount += layout.DynamicBufferCount;
             }
@@ -425,7 +425,7 @@ namespace Vuldrid.Vk
 
             ResourceSetCount = (uint)description.ResourceLayouts.Length;
             DynamicOffsetsCount = 0;
-            foreach (VkResourceLayout layout in description.ResourceLayouts)
+            foreach (VkResourceLayout layout in description.ResourceLayouts.Cast<VkResourceLayout>())
             {
                 DynamicOffsetsCount += layout.DynamicBufferCount;
             }
