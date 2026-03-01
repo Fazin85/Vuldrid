@@ -125,8 +125,8 @@ namespace Vuldrid.Examples
                 ShaderSet = new ShaderSetDescription(
                     [
                         new VertexLayoutDescription(
-                            new VertexElementDescription("Position", VertexElementFormat.Float2, VertexElementSemantic.Position),
-                            new VertexElementDescription("Color", VertexElementFormat.Float4, VertexElementSemantic.Color))
+                            new VertexElementDescription("Position", VertexElementFormat.Float2),
+                            new VertexElementDescription("Color", VertexElementFormat.Float4))
                     ],
                     [vertexShader, fragmentShader]),
                 Outputs = _graphicsDevice.MainSwapchain.Framebuffer.OutputDescription

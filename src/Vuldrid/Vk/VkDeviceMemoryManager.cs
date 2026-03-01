@@ -467,9 +467,9 @@ namespace Vuldrid.Vk
         public ulong Offset;
         public ulong Size;
 
-        public void* BlockMappedPointer => ((byte*)BaseMappedPointer) + Offset;
-        public bool IsPersistentMapped => BaseMappedPointer != null;
-        public ulong End => Offset + Size;
+        public readonly void* BlockMappedPointer => ((byte*)BaseMappedPointer) + Offset;
+        public readonly bool IsPersistentMapped => BaseMappedPointer != null;
+        public readonly ulong End => Offset + Size;
 
         public VkMemoryBlock(
             VkDeviceMemory memory,
@@ -487,7 +487,7 @@ namespace Vuldrid.Vk
             DedicatedAllocation = dedicatedAllocation;
         }
 
-        public bool Equals(VkMemoryBlock other)
+        public readonly bool Equals(VkMemoryBlock other)
         {
             return DeviceMemory.Equals(other.DeviceMemory)
                 && Offset.Equals(other.Offset)

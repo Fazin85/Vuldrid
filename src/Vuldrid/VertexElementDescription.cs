@@ -12,12 +12,6 @@ namespace Vuldrid
         /// </summary>
         public string Name;
         /// <summary>
-        /// The semantic type of the element.
-        /// NOTE: When using Veldrid.SPIRV, all vertex elements will use
-        /// <see cref="VertexElementSemantic.TextureCoordinate"/>.
-        /// </summary>
-        public VertexElementSemantic Semantic;
-        /// <summary>
         /// The format of the element.
         /// </summary>
         public VertexElementFormat Format;
@@ -27,30 +21,16 @@ namespace Vuldrid
         public uint Offset;
 
         /// <summary>
-        /// Constructs a new VertexElementDescription describing a per-vertex element.
-        /// </summary>
-        /// <param name="name">The name of the element.</param>
-        /// <param name="semantic">The semantic type of the element.</param>
-        /// <param name="format">The format of the element.</param>
-        public VertexElementDescription(string name, VertexElementSemantic semantic, VertexElementFormat format)
-            : this(name, format, semantic)
-        {
-        }
-
-        /// <summary>
         /// Constructs a new VertexElementDescription.
         /// </summary>
         /// <param name="name">The name of the element.</param>
-        /// <param name="semantic">The semantic type of the element.</param>
         /// <param name="format">The format of the element.</param>
         public VertexElementDescription(
             string name,
-            VertexElementFormat format,
-            VertexElementSemantic semantic)
+            VertexElementFormat format)
         {
             Name = name;
             Format = format;
-            Semantic = semantic;
             Offset = 0;
         }
 
@@ -58,18 +38,15 @@ namespace Vuldrid
         /// Constructs a new VertexElementDescription.
         /// </summary>
         /// <param name="name">The name of the element.</param>
-        /// <param name="semantic">The semantic type of the element.</param>
         /// <param name="format">The format of the element.</param>
         /// <param name="offset">The offset in bytes from the beginning of the vertex.</param>
         public VertexElementDescription(
             string name,
-            VertexElementSemantic semantic,
             VertexElementFormat format,
             uint offset)
         {
             Name = name;
             Format = format;
-            Semantic = semantic;
             Offset = offset;
         }
 
@@ -78,11 +55,10 @@ namespace Vuldrid
         /// </summary>
         /// <param name="other">The instance to compare to.</param>
         /// <returns>True if all elements are equal; false otherswise.</returns>
-        public bool Equals(VertexElementDescription other)
+        public readonly bool Equals(VertexElementDescription other)
         {
             return Name.Equals(other.Name)
                 && Format == other.Format
-                && Semantic == other.Semantic
                 && Offset == other.Offset;
         }
 
@@ -90,13 +66,27 @@ namespace Vuldrid
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return HashHelper.Combine(
                 Name.GetHashCode(),
                 (int)Format,
-                (int)Semantic,
                 (int)Offset);
+        }
+
+        public override readonly bool Equals(object obj)
+        {
+            return obj is VertexElementDescription description && Equals(description);
+        }
+
+        public static bool operator ==(VertexElementDescription left, VertexElementDescription right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(VertexElementDescription left, VertexElementDescription right)
+        {
+            return !(left == right);
         }
     }
 }

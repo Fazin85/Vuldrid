@@ -93,7 +93,7 @@ namespace Vuldrid
         /// </summary>
         /// <param name="other">The instance to compare to.</param>
         /// <returns>True if all elements are equal; false otherswise.</returns>
-        public bool Equals(SwapchainDescription other)
+        public readonly bool Equals(SwapchainDescription other)
         {
             return WindowHandle.Equals(other.WindowHandle)
                 && Width.Equals(other.Width)

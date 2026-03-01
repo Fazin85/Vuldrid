@@ -16,7 +16,7 @@ namespace Vuldrid.Vk
         private fixed byte _storage[CapacityInBytes];
         private uint _count;
 
-        public uint Count => _count;
+        public readonly uint Count => _count;
         public void* Data => Unsafe.AsPointer(ref this);
 
         public void Add(T item)
@@ -66,7 +66,7 @@ namespace Vuldrid.Vk
 #pragma warning restore 0169
         private uint _count;
 
-        public uint Count => _count;
+        public readonly uint Count => _count;
         public void* Data => Unsafe.AsPointer(ref this);
 
         public void Add(T item)
